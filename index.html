@@ -1,223 +1,281 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogo Editable</title>
-  <style>
-    :root {
-      --bg: #f6f7fb;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --accent: #2563eb;
-      --border: #e5e7eb;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    header {
-      padding: 16px;
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    h1 {
-      margin: 0 0 6px;
-      font-size: 1.3rem;
-    }
-
-    .hint {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .actions {
-      margin-top: 12px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--text);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
-
-    button.primary {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-
-    main {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 12px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      min-height: 180px;
-    }
-
-    .editable {
-      outline: none;
-      border-radius: 6px;
-      padding: 4px;
-    }
-
-    .editable:focus {
-      background: #eff6ff;
-      box-shadow: inset 0 0 0 1px #bfdbfe;
-    }
-
-    .name {
-      margin: 0 0 4px;
-      font-size: 1.05rem;
-      font-weight: 700;
-    }
-
-    .price {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .desc {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.35;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1 contenteditable="true" class="editable" id="catalogTitle">Catálogo desde el celular</h1>
-    <p class="hint">Toca cualquier texto para editarlo. Guarda cambios para mantenerlos.</p>
-    <div class="actions">
-      <button class="primary" id="saveBtn">Guardar cambios</button>
-      <button id="addBtn">Agregar producto</button>
-      <button id="resetBtn">Restablecer ejemplo</button>
-    </div>
-  </header>
-
-  <main>
-    <section class="grid" id="catalog"></section>
-  </main>
-
-  <template id="cardTemplate">
-    <article class="card">
-      <h2 class="name editable" contenteditable="true">Producto</h2>
-      <p class="price editable" contenteditable="true">$0.00</p>
-      <p class="desc editable" contenteditable="true">Descripción del producto.</p>
-    </article>
-  </template>
-
-  <script>
-    const STORAGE_KEY = 'catalogo_editable_v1';
-    const TITLE_KEY = 'catalogo_titulo_v1';
-    const catalog = document.getElementById('catalog');
-    const template = document.getElementById('cardTemplate');
-    const saveBtn = document.getElementById('saveBtn');
-    const addBtn = document.getElementById('addBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const catalogTitle = document.getElementById('catalogTitle');
-
-    const initialProducts = [
-      { name: 'Silla Moderna', price: '$49.99', desc: 'Diseño minimalista para sala o estudio.' },
-      { name: 'Lámpara LED', price: '$24.50', desc: 'Luz cálida con bajo consumo eléctrico.' },
-      { name: 'Mesa Auxiliar', price: '$79.00', desc: 'Ideal para espacios pequeños y prácticos.' }
-    ];
-
-    function createCard(product) {
-      const card = template.content.firstElementChild.cloneNode(true);
-      card.querySelector('.name').textContent = product.name;
-      card.querySelector('.price').textContent = product.price;
-      card.querySelector('.desc').textContent = product.desc;
-      return card;
-    }
-
-    function render(products) {
-      catalog.innerHTML = '';
-      products.forEach((p) => catalog.appendChild(createCard(p)));
-    }
-
-    function getProductsFromDOM() {
-      return [...catalog.querySelectorAll('.card')].map((card) => ({
-        name: card.querySelector('.name').textContent.trim(),
-        price: card.querySelector('.price').textContent.trim(),
-        desc: card.querySelector('.desc').textContent.trim()
-      }));
-    }
-
-    function save() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(getProductsFromDOM()));
-      localStorage.setItem(TITLE_KEY, catalogTitle.textContent.trim());
-      saveBtn.textContent = '¡Guardado!';
-      setTimeout(() => (saveBtn.textContent = 'Guardar cambios'), 1200);
-    }
-
-    function load() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      const savedTitle = localStorage.getItem(TITLE_KEY);
-      if (savedTitle) catalogTitle.textContent = savedTitle;
-
-      if (!saved) {
-        render(initialProducts);
-        return;
-      }
-
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length) {
-          render(parsed);
-        } else {
-          render(initialProducts);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Editable</title>
+    <style>
+        :root {
+            --bg: #f6f7fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --accent: #2563eb;
+            --border: #e5e7eb;
         }
-      } catch {
-        render(initialProducts);
-      }
-    }
 
-    addBtn.addEventListener('click', () => {
-      catalog.appendChild(createCard({ name: 'Nuevo producto', price: '$0.00', desc: 'Edita este texto.' }));
-    });
+        * {
+            box-sizing: border-box;
+        }
 
-    resetBtn.addEventListener('click', () => {
-      render(initialProducts);
-      catalogTitle.textContent = 'Catálogo desde el celular';
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(TITLE_KEY);
-    });
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
 
-    saveBtn.addEventListener('click', save);
-    load();
-  </script>
+        header {
+            padding: 16px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        h1 {
+            margin: 0 0 6px;
+            font-size: 1.3rem;
+        }
+
+        .hint {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        button.primary {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            min-height: 180px;
+        }
+
+        .editable {
+            outline: none;
+            border-radius: 6px;
+            padding: 4px;
+        }
+
+        .editable:focus {
+            background: #eff6ff;
+            box-shadow: inset 0 0 0 1px #bfdbfe;
+        }
+
+        .name {
+            margin: 0 0 4px;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .price {
+            margin: 0 0 8px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .desc {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.35;
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .filters input,
+        .filters select {
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 contenteditable="true" class="editable" id="catalogTitle">Catálogo desde el celular</h1>
+        <p class="hint">Toca cualquier texto para editarlo. Guarda cambios para mantenerlos.</p>
+        <div class="actions">
+            <button class="primary" id="saveBtn">Guardar cambios</button>
+            <button id="addBtn">Agregar producto</button>
+            <button id="resetBtn">Restablecer ejemplo</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="filters">
+            <input type="text" id="searchName" placeholder="Buscar por nombre...">
+            <select id="filterCategory">
+                <option value="">Todas las categorías</option>
+                <option value="Oscuras">Oscuras</option>
+                <option value="Claras">Claras</option>
+                <option value="Rojas">Rojas</option>
+            </select>
+        </div>
+
+        <section class="grid" id="catalog"></section>
+    </main>
+
+    <template id="cardTemplate">
+        <article class="card" data-category="">
+            <h2 class="name editable" contenteditable="true">Producto</h2>
+            <p class="price editable" contenteditable="true">$0.00</p>
+            <p class="desc editable" contenteditable="true">Descripción del producto.</p>
+        </article>
+    </template>
+
+    <script>
+        const STORAGE_KEY = 'catalogo_editable_v1';
+        const TITLE_KEY = 'catalogo_titulo_v1';
+        const catalog = document.getElementById('catalog');
+        const template = document.getElementById('cardTemplate');
+        const saveBtn = document.getElementById('saveBtn');
+        const addBtn = document.getElementById('addBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const catalogTitle = document.getElementById('catalogTitle');
+        const searchName = document.getElementById('searchName');
+        const filterCategory = document.getElementById('filterCategory');
+
+        const initialProducts = [
+            { name: 'Silla Moderna', price: '$49.99', desc: 'Diseño minimalista.', category: 'Claras' },
+            { name: 'Lámpara LED', price: '$24.50', desc: 'Luz cálida.', category: 'Cálidas' },
+            { name: 'Mesa Auxiliar', price: '$79.00', desc: 'Para espacios pequeños.', category: 'Oscuras' }
+        ];
+
+        function createCard(product) {
+            const card = template.content.firstElementChild.cloneNode(true);
+            card.querySelector('.name').textContent = product.name;
+            card.querySelector('.price').textContent = product.price;
+            card.querySelector('.desc').textContent = product.desc;
+            card.setAttribute('data-category', product.category);
+            return card;
+        }
+
+        function render(products) {
+            catalog.innerHTML = '';
+            products.forEach((p) => catalog.appendChild(createCard(p)));
+        }
+
+        function getProductsFromDOM() {
+            return [...catalog.querySelectorAll('.card')].map((card) => ({
+                name: card.querySelector('.name').textContent.trim(),
+                price: card.querySelector('.price').textContent.trim(),
+                desc: card.querySelector('.desc').textContent.trim(),
+                category: card.getAttribute('data-category')
+            }));
+        }
+
+        function save() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(getProductsFromDOM()));
+            localStorage.setItem(TITLE_KEY, catalogTitle.textContent.trim());
+            saveBtn.textContent = '¡Guardado!';
+            setTimeout(() => (saveBtn.textContent = 'Guardar cambios'), 1200);
+        }
+
+        function load() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            const savedTitle = localStorage.getItem(TITLE_KEY);
+            if (savedTitle) catalogTitle.textContent = savedTitle;
+
+            if (!saved) {
+                render(initialProducts);
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length) {
+                    render(parsed);
+                } else {
+                    render(initialProducts);
+                }
+            } catch {
+                render(initialProducts);
+            }
+        }
+
+        function filterCatalog() {
+            const name = searchName.value.toLowerCase();
+            const category = filterCategory.value;
+            const products = getProductsFromDOM();
+
+            const filtered = products.filter(
+                (p) =>
+                    p.name.toLowerCase().includes(name) &&
+                    (!category || p.category === category)
+            );
+
+            render(filtered);
+        }
+
+        searchName.addEventListener('input', filterCatalog);
+        filterCategory.addEventListener('change', filterCatalog);
+
+        addBtn.addEventListener('click', () => {
+            catalog.appendChild(
+                createCard({
+                    name: 'Nuevo producto',
+                    price: '$0.00',
+                    desc: 'Edita este texto.',
+                    category: ''
+                })
+            );
+        });
+
+        resetBtn.addEventListener('click', () => {
+            render(initialProducts);
+            catalogTitle.textContent = 'Catálogo desde el celular';
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(TITLE_KEY);
+        });
+
+        saveBtn.addEventListener('click', save);
+        load();
+    </script>
 </body>
+
 </html>
