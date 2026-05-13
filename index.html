@@ -6,132 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo Editable</title>
     <style>
-        :root {
-            --bg: #f6f7fb;
-            --card: #ffffff;
-            --text: #1f2937;
-            --muted: #6b7280;
-            --accent: #2563eb;
-            --border: #e5e7eb;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        header {
-            padding: 16px;
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        h1 {
-            margin: 0 0 6px;
-            font-size: 1.3rem;
-        }
-
-        .hint {
-            margin: 0;
-            font-size: 0.9rem;
-            color: var(--muted);
-        }
-
-        .actions {
-            margin-top: 12px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            border: 1px solid var(--border);
-            background: white;
-            color: var(--text);
-            border-radius: 8px;
-            padding: 10px 12px;
-            font-size: 0.95rem;
-            cursor: pointer;
-        }
-
-        button.primary {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        main {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 16px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 12px;
-        }
-
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px;
-            min-height: 180px;
-        }
-
-        .editable {
-            outline: none;
-            border-radius: 6px;
-            padding: 4px;
-        }
-
-        .editable:focus {
-            background: #eff6ff;
-            box-shadow: inset 0 0 0 1px #bfdbfe;
-        }
-
-        .name {
-            margin: 0 0 4px;
-            font-size: 1.05rem;
-            font-weight: 700;
-        }
-
-        .price {
-            margin: 0 0 8px;
-            color: var(--accent);
-            font-weight: 700;
-        }
-
-        .desc {
-            margin: 0;
-            color: var(--muted);
-            font-size: 0.92rem;
-            line-height: 1.35;
-        }
-
-        .filters {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .filters input,
-        .filters select {
-            padding: 8px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
+        :root { --bg:#f6f7fb; --card:#fff; --text:#1f2937; --muted:#6b7280; --accent:#2563eb; --border:#e5e7eb; }
+        * { box-sizing:border-box; }
+        body { margin:0; font-family:Arial,sans-serif; background:var(--bg); color:var(--text); }
+        header { padding:16px; background:var(--card); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:10; }
+        h1 { margin:0 0 6px; font-size:1.3rem; }
+        .hint { margin:0; font-size:.9rem; color:var(--muted); }
+        .actions { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+        button { border:1px solid var(--border); background:white; color:var(--text); border-radius:8px; padding:10px 12px; font-size:.95rem; cursor:pointer; }
+        button.primary { background:var(--accent); color:white; border-color:var(--accent); }
+        main { max-width:980px; margin:0 auto; padding:16px; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+        .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; min-height:190px; }
+        .editable { outline:none; border-radius:6px; padding:4px; }
+        .editable:focus { background:#eff6ff; box-shadow:inset 0 0 0 1px #bfdbfe; }
+        .name { margin:0 0 4px; font-size:1.05rem; font-weight:700; }
+        .price { margin:0 0 8px; color:var(--accent); font-weight:700; }
+        .desc { margin:0 0 10px; color:var(--muted); font-size:.92rem; line-height:1.35; }
+        .chip { display:inline-block; border:1px solid var(--border); border-radius:999px; padding:4px 10px; font-size:.8rem; color:var(--muted); }
+        .filters { display:flex; gap:8px; margin-bottom:24px; }
+        .filters input,.filters select { padding:8px; border:1px solid var(--border); border-radius:8px; font-size:.9rem; }
     </style>
 </head>
 
@@ -151,9 +45,9 @@
             <input type="text" id="searchName" placeholder="Buscar por nombre...">
             <select id="filterCategory">
                 <option value="">Todas las categorías</option>
-                <option value="Oscuras">Oscuras</option>
                 <option value="Claras">Claras</option>
-                <option value="Rojas">Rojas</option>
+                <option value="Cálidas">Cálidas</option>
+                <option value="Oscuras">Oscuras</option>
             </select>
         </div>
 
@@ -165,6 +59,7 @@
             <h2 class="name editable" contenteditable="true">Producto</h2>
             <p class="price editable" contenteditable="true">$0.00</p>
             <p class="desc editable" contenteditable="true">Descripción del producto.</p>
+            <span class="chip editable" contenteditable="true">Categoría</span>
         </article>
     </template>
 
@@ -191,7 +86,8 @@
             card.querySelector('.name').textContent = product.name;
             card.querySelector('.price').textContent = product.price;
             card.querySelector('.desc').textContent = product.desc;
-            card.setAttribute('data-category', product.category);
+            card.querySelector('.chip').textContent = product.category || 'Sin categoría';
+            card.setAttribute('data-category', product.category || '');
             return card;
         }
 
@@ -205,8 +101,19 @@
                 name: card.querySelector('.name').textContent.trim(),
                 price: card.querySelector('.price').textContent.trim(),
                 desc: card.querySelector('.desc').textContent.trim(),
-                category: card.getAttribute('data-category')
+                category: card.querySelector('.chip').textContent.trim()
             }));
+        }
+
+        function getAllProducts() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return initialProducts;
+            try {
+                const parsed = JSON.parse(saved);
+                return Array.isArray(parsed) && parsed.length ? parsed : initialProducts;
+            } catch {
+                return initialProducts;
+            }
         }
 
         function save() {
@@ -217,38 +124,17 @@
         }
 
         function load() {
-            const saved = localStorage.getItem(STORAGE_KEY);
             const savedTitle = localStorage.getItem(TITLE_KEY);
             if (savedTitle) catalogTitle.textContent = savedTitle;
-
-            if (!saved) {
-                render(initialProducts);
-                return;
-            }
-
-            try {
-                const parsed = JSON.parse(saved);
-                if (Array.isArray(parsed) && parsed.length) {
-                    render(parsed);
-                } else {
-                    render(initialProducts);
-                }
-            } catch {
-                render(initialProducts);
-            }
+            render(getAllProducts());
         }
 
         function filterCatalog() {
             const name = searchName.value.toLowerCase();
             const category = filterCategory.value;
-            const products = getProductsFromDOM();
-
-            const filtered = products.filter(
-                (p) =>
-                    p.name.toLowerCase().includes(name) &&
-                    (!category || p.category === category)
+            const filtered = getAllProducts().filter((p) =>
+                p.name.toLowerCase().includes(name) && (!category || p.category === category)
             );
-
             render(filtered);
         }
 
@@ -256,19 +142,14 @@
         filterCategory.addEventListener('change', filterCatalog);
 
         addBtn.addEventListener('click', () => {
-            catalog.appendChild(
-                createCard({
-                    name: 'Nuevo producto',
-                    price: '$0.00',
-                    desc: 'Edita este texto.',
-                    category: ''
-                })
-            );
+            catalog.appendChild(createCard({ name: 'Nuevo producto', price: '$0.00', desc: 'Edita este texto.', category: 'Sin categoría' }));
         });
 
         resetBtn.addEventListener('click', () => {
             render(initialProducts);
             catalogTitle.textContent = 'Catálogo desde el celular';
+            searchName.value = '';
+            filterCategory.value = '';
             localStorage.removeItem(STORAGE_KEY);
             localStorage.removeItem(TITLE_KEY);
         });
